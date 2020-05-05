@@ -82,7 +82,7 @@ main() {
 	echo "$(sed "s|^inventory_loc=.*|inventory_loc=${wl_working_dir}/oraInventory|" "${script_dir}/../conf/oraInst.loc")" > "${script_dir}/../conf/oraInst.loc"
 	echo "$(sed "s|^inst_group=.*|inst_group=${wl_system_group}|" "${script_dir}/../conf/oraInst.loc")" > "${script_dir}/../conf/oraInst.loc"
 	echo "$(sed "s|^ORACLE_HOME=.*|ORACLE_HOME=${wl_oracle_home}|" "${script_dir}/../conf/wls_install.rsp")" > "${script_dir}/../conf/wls_install.rsp"
-	"${wl_java_dir}/jdk//bin/java" -jar "${weblogic_install}" -silent -responseFile "${script_dir}/../conf/wls_install.rsp" -invPtrLoc "${script_dir}/../conf/oraInst.loc"
+	"${wl_java_dir}/jdk/bin/java" -jar "${weblogic_install}" -silent -responseFile "${script_dir}/../conf/wls_install.rsp" -invPtrLoc "${script_dir}/../conf/oraInst.loc"
 
 	# echo "wl_working_dir=${wl_working_dir}"
 	# echo "wl_java_dir=${wl_java_dir}"
