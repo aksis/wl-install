@@ -66,7 +66,7 @@ main() {
 		usage "weblogic instalation file not exist"
 	fi
 	weblogic_install="$(cd `dirname "$weblogic_install"` && pwd)/$(basename "$weblogic_install")"
-	echo "weblogic_install=${weblogic_install}"
+	# echo "weblogic_install=${weblogic_install}"
 
 	# echo "wl_system_user=${wl_system_user}"
 	# echo "wl_system_uid=${wl_system_uid}"
