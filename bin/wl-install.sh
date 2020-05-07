@@ -3,10 +3,17 @@
 set -e
 set -u
 
+umask 027
+
 script_name="$(basename "$0")"
 script_dir="$(cd `dirname "$0"` && pwd)"
 
 . "${script_dir}/../conf/${script_name}.cfg"
+
+if [ "$(id -un 2>/dev/null)" != "$wl_system_user" ]; then
+	echo "Trying to use sudo. Current user: $(id -un 2>/dev/null)@$(hostname)"
+	exec sudo -k -u "$wl_system_user" "$0" "$@"
+fi
 
 usage() {
 	if [ "${1--}" != "-" ]; then
@@ -16,8 +23,8 @@ usage() {
 
 	echo "usage: $(basename "$0") <options>"
 	echo "options:"
-	echo "  -j <file> install Java from tar.gz file"
-	echo "  -w <file> install Weblogic from jar file"
+	echo "  -j <file> install Java from .tar.gz file"
+	echo "  -w <file> install WebLogic from .jar file"
 	echo "  -h        print this help and exit"
 	echo "  --        end of options"
 	echo "info:"
@@ -50,28 +57,17 @@ parse_options() {
 }
 
 main() {
-	# os_kernel="$(uname -s)"
-	# if [ "$os_kernel" != "Linux" ]; then
-	# 	usage "${os_kernel} not supported"
-	# fi
 	parse_options ${1+"$@"}
 
 	if [ ! -f "${java_install-}" ]; then
 		usage "java instalation file not exist"
 	fi
 	java_install="$(cd `dirname "$java_install"` && pwd)/$(basename "$java_install")"
-	# echo "java_install=${java_install}"
 
 	if [ ! -f "${weblogic_install-}" ]; then
 		usage "weblogic instalation file not exist"
 	fi
 	weblogic_install="$(cd `dirname "$weblogic_install"` && pwd)/$(basename "$weblogic_install")"
-	# echo "weblogic_install=${weblogic_install}"
-
-	# echo "wl_system_user=${wl_system_user}"
-	# echo "wl_system_uid=${wl_system_uid}"
-	# echo "wl_system_group=${wl_system_group}"
-	# echo "wl_system_gid=${wl_system_gid}"
 
 	if [ ! -d "${wl_java_dir}/jdk" ]; then
 		mkdir -p "${wl_java_dir}/jdk"
@@ -84,9 +80,9 @@ main() {
 	echo "$(sed "s|^ORACLE_HOME=.*|ORACLE_HOME=${wl_oracle_home}|" "${script_dir}/../conf/wls_install.rsp")" > "${script_dir}/../conf/wls_install.rsp"
 	"${wl_java_dir}/jdk/bin/java" -jar "${weblogic_install}" -silent -responseFile "${script_dir}/../conf/wls_install.rsp" -invPtrLoc "${script_dir}/../conf/oraInst.loc"
 
-	# echo "wl_working_dir=${wl_working_dir}"
-	# echo "wl_java_dir=${wl_java_dir}"
-	# echo "wl_oracle_home=${wl_oracle_home}"
+	export wl_weblogic_pass
+	export wl_domain_home
+	"${wl_oracle_home}/oracle_common/common/bin/wlst.sh"
 }
 
 main ${1+"$@"}
