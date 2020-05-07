@@ -3,8 +3,6 @@
 set -e
 set -u
 
-umask 027
-
 script_name="$(basename "$0")"
 script_dir="$(cd `dirname "$0"` && pwd)"
 
@@ -14,6 +12,8 @@ if [ "$(id -un 2>/dev/null)" != "$wl_system_user" ]; then
 	echo "Trying to use sudo. Current user: $(id -un 2>/dev/null)@$(hostname)"
 	exec sudo -k -u "$wl_system_user" "$0" "$@"
 fi
+
+umask 027
 
 usage() {
 	if [ "${1--}" != "-" ]; then
