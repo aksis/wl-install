@@ -82,7 +82,7 @@ main() {
 
 	export wl_weblogic_pass
 	export wl_domain_home
-	"${wl_oracle_home}/oracle_common/common/bin/wlst.sh"
+	"${wl_oracle_home}/oracle_common/common/bin/wlst.sh" "${script_dir}/../wlst/create_domain.py"
 }
 
 main ${1+"$@"}
