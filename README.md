@@ -5,7 +5,8 @@
 sudo groupadd -g 1010 oinstall
 sudo useradd -u 1010 -g oinstall -m oracle
 sudo mkdir -p /u01/oracle
-sudo chown oracle:oinstall /u01/oracle
+sudo mkdir -p /u01/wl-install
+sudo chown -R oracle:oinstall /u01
 ```
 
 ```
